@@ -1,6 +1,7 @@
 package com.ajscanlan.tapadooprogrammingtest.download;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.ajscanlan.tapadooprogrammingtest.model.Book;
 
@@ -8,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Created by Alexander Scanlan on 03/11/2015
@@ -44,17 +46,23 @@ public class DownloadDescriptionHandler {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+
+            String description;
+
             try {
+
                 JSONObject myJsonObject = new JSONObject(s);
-                String description = myJsonObject.getString("description");
+
+                description = myJsonObject.getString("description");
 
                 mBook.setDescription(description);
 
-                mCallback.finished(description);
-
             } catch (JSONException e) {
                 e.printStackTrace();
+                description = "Unexpected Error Retrieving book details";
             }
+
+            mCallback.finished(description);
         }
     }
 }

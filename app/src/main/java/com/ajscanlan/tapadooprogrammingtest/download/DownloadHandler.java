@@ -26,8 +26,8 @@ import java.util.List;
 public class DownloadHandler {
 
     //CONNECTION STRINGS
-    public static final String BASE_URL = "http://private-anon-fd8149e4b-tpbookserver.apiary-mock.com/books";
-    public static final String ID_URL = "http://private-anon-fd8149e4b-tpbookserver.apiary-mock.com/book/";
+    public static final String BASE_URL = "http://tpbookserver.herokuapp.com/books";
+    public static final String ID_URL = "http://tpbookserver.herokuapp.com/book/";
 
     //DEBUG STRING
     private static final String DEBUG_TAG = "DOWNLOAD_DEBUG_TAG";

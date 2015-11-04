@@ -1,18 +1,17 @@
 package com.ajscanlan.tapadooprogrammingtest;
 
 import android.app.Activity;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ajscanlan.tapadooprogrammingtest.download.DownloadCallback;
+import com.ajscanlan.tapadooprogrammingtest.download.DownloadDescriptionHandler;
 import com.ajscanlan.tapadooprogrammingtest.model.Book;
 
 import java.util.List;
@@ -23,14 +22,14 @@ import java.util.List;
  * in two-pane mode (on tablets) or a {@link BookDetailActivity}
  * on handsets.
  */
-public class BookDetailFragment extends Fragment implements DownloadCallback{
+
+public class BookDetailFragment extends Fragment implements DownloadCallback {
 
     //TextView for description
     private TextView descTextView;
 
     /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
+     * The fragment argument representing the position in the list of the item.
      */
     public static final String ARG_ITEM_POSITION = "item_position";
 
@@ -56,28 +55,18 @@ public class BookDetailFragment extends Fragment implements DownloadCallback{
             mItem = BookListFragment.mBooks.get(getArguments().getInt(ARG_ITEM_POSITION));
 
             Activity activity = this.getActivity();
-//            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-//            if (appBarLayout != null) {
-//                appBarLayout.setTitle(mItem.getTitle());
-//            }
 
-//            Toolbar toolbar = (Toolbar) activity.findViewById(R.id.my_toolbar);
-//            if(toolbar != null) {
-//                toolbar.setTitle(mItem.getTitle());
-//            }
-
+            //Sets the title of the action bar to the tile of the book
             if(((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
                 ((AppCompatActivity )getActivity()).getSupportActionBar().setTitle(mItem.getTitle());
-            } else {
-                Toast.makeText(getContext(), "NULL", Toast.LENGTH_LONG).show();
             }
-
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.fragment_book_detail, container, false);
 
         // Show the model content as text in a TextView.
@@ -88,15 +77,16 @@ public class BookDetailFragment extends Fragment implements DownloadCallback{
             ((TextView) rootView.findViewById(R.id.id_view)).setText(String.valueOf(mItem.getId()));
 
             descTextView = (TextView) rootView.findViewById(R.id.desc_view);
+
             /*
                 if the items description has been updated display it else display "Loading..."
-                 while it is fetched
+                 while it is being fetched
              */
             if(mItem.getDescription() != null){
                 descTextView.setText(mItem.getDescription());
             } else {
                 descTextView.setText(R.string.loading);
-                new DownloadDescriptionHandler(getContext(), this, mItem);
+                new DownloadDescriptionHandler(this, mItem);
             }
 
             /*
@@ -113,16 +103,17 @@ public class BookDetailFragment extends Fragment implements DownloadCallback{
     }
 
     /**
-     * Not used in this class
-     */
-    @Override
-    public void finished(List<Book> list) {}
-
-    /**
      * Used to update description TextView when finished downloading
      */
     @Override
     public void finished(String description) {
         descTextView.setText(description);
     }
+
+    /**
+     * Not used in this class
+     */
+    @Override
+    public void finished(List<Book> list) {}
+
 }

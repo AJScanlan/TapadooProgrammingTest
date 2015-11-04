@@ -1,6 +1,5 @@
-package com.ajscanlan.tapadooprogrammingtest;
+package com.ajscanlan.tapadooprogrammingtest.download;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 import com.ajscanlan.tapadooprogrammingtest.model.Book;
@@ -15,13 +14,12 @@ import java.io.IOException;
  */
 public class DownloadDescriptionHandler {
 
-    private Context mContext;
     private DownloadCallback mCallback;
 
-    public DownloadDescriptionHandler(Context context, DownloadCallback callback, Book book){
+    public DownloadDescriptionHandler(DownloadCallback callback, Book book) {
         mCallback = callback;
-        mContext = context;
 
+        //run AsyncTask to fetch descriptions
         new DownloadDescTask().execute(book);
     }
 
@@ -36,6 +34,7 @@ public class DownloadDescriptionHandler {
                 mBook = params[0];
 
                 return DownloadHandler.downloadUrl(DownloadHandler.ID_URL + mBook.getId());
+
             } catch (IOException e) {
                 e.printStackTrace();
                 return "A problem has occurred";

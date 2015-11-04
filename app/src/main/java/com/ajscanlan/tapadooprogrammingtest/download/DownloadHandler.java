@@ -1,4 +1,4 @@
-package com.ajscanlan.tapadooprogrammingtest;
+package com.ajscanlan.tapadooprogrammingtest.download;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -25,17 +25,19 @@ import java.util.List;
  */
 public class DownloadHandler {
 
-    static String BASE_URL = "http://private-anon-fd8149e4b-tpbookserver.apiary-mock.com/books";
-    static String ID_URL = "http://private-anon-fd8149e4b-tpbookserver.apiary-mock.com/book/";
+    //CONNECTION STRINGS
+    public static final String BASE_URL = "http://private-anon-fd8149e4b-tpbookserver.apiary-mock.com/books";
+    public static final String ID_URL = "http://private-anon-fd8149e4b-tpbookserver.apiary-mock.com/book/";
+
+    //DEBUG STRING
+    private static final String DEBUG_TAG = "DOWNLOAD_DEBUG_TAG";
 
     private Context mContext;
     private DownloadCallback mCallback;
-    private List<Book> books;
 
-    private static final String DEBUG_TAG = "DOWNLOAD_DEBUG_TAG";
 
-    public DownloadHandler(Context c, DownloadCallback callback, String url){
-        mContext = c;
+    public DownloadHandler(Context context, DownloadCallback callback, String url){
+        mContext = context;
         mCallback = callback;
 
         new DownloadAllTask().execute(url);
@@ -106,8 +108,9 @@ public class DownloadHandler {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             try {
+                //Instantiating JSONArray with string returned from site and list to hold books
                 JSONArray myJsonArray = new JSONArray(s);
-                books = new ArrayList<>();
+                List<Book> books = new ArrayList<>();
 
                 //temp values for initialising book objects
                 int id;

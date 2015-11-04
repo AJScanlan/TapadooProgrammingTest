@@ -3,18 +3,10 @@ package com.ajscanlan.tapadooprogrammingtest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
 
-import com.ajscanlan.tapadooprogrammingtest.model.Book;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.ajscanlan.tapadooprogrammingtest.download.DownloadHandler;
 
 
 /**
@@ -73,7 +65,7 @@ public class BookListActivity extends AppCompatActivity implements BookListFragm
 
     /**
      * Callback method from {@link BookListFragment.Callbacks}
-     * indicating that the item with the given ID was selected.
+     * passing in the position of the list item
      */
     @Override
     public void onItemSelected(int position) {
@@ -82,7 +74,8 @@ public class BookListActivity extends AppCompatActivity implements BookListFragm
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
-            // fragment transaction.
+            // fragment transaction. Sends the position of the item in the list
+            // as an argument
             Bundle arguments = new Bundle();
             arguments.putInt(BookDetailFragment.ARG_ITEM_POSITION, position);
             BookDetailFragment fragment = new BookDetailFragment();
@@ -92,20 +85,23 @@ public class BookListActivity extends AppCompatActivity implements BookListFragm
                     .commit();
 
         } else {
-
+            //Opens the BookDetailActivity on phones
             Intent detailIntent = new Intent(this, BookDetailActivity.class);
-            detailIntent.putExtra(BookDetailFragment.ARG_ITEM_POSITION, position);
 
+            //put the position of the clicked item in the intent for retrieval later
+            detailIntent.putExtra(BookDetailFragment.ARG_ITEM_POSITION, position);
             startActivity(detailIntent);
         }
     }
 
+    //inflates the menu for the appcompat menu bar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
+    //Refreshes list when menu item is clicked
     public void refreshList(MenuItem item) {
         new DownloadHandler(BookListActivity.this,
                 ((BookListFragment)getSupportFragmentManager().findFragmentById(R.id.book_list)),

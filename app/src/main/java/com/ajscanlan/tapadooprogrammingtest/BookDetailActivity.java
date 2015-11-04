@@ -14,11 +14,9 @@ import android.view.MenuItem;
  * An activity representing a single Book detail screen. This
  * activity is only used on handset devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
- * in a {@link BookListActivity}.
- * <p/>
- * This activity is mostly just a 'shell' activity containing nothing
- * more than a {@link BookDetailFragment}.
+ * in a BookListActivity.
  */
+
 public class BookDetailActivity extends AppCompatActivity {
 
     @Override

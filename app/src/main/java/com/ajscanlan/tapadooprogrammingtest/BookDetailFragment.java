@@ -4,12 +4,18 @@ import android.app.Activity;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ajscanlan.tapadooprogrammingtest.model.Book;
+
+import java.util.List;
 
 /**
  * A fragment representing a single Book detail screen.
@@ -17,9 +23,10 @@ import com.ajscanlan.tapadooprogrammingtest.model.Book;
  * in two-pane mode (on tablets) or a {@link BookDetailActivity}
  * on handsets.
  */
-public class BookDetailFragment extends Fragment {
+public class BookDetailFragment extends Fragment implements DownloadCallback{
 
-
+    //TextView for description
+    private TextView descTextView;
 
     /**
      * The fragment argument representing the item ID that this fragment
@@ -44,23 +51,28 @@ public class BookDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_ITEM_POSITION)) {
-            // Load the model content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
+
+            //Getting book from list at the position passed in the arguments
             mItem = BookListFragment.mBooks.get(getArguments().getInt(ARG_ITEM_POSITION));
 
             Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.getTitle());
+//            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+//            if (appBarLayout != null) {
+//                appBarLayout.setTitle(mItem.getTitle());
+//            }
+
+//            Toolbar toolbar = (Toolbar) activity.findViewById(R.id.my_toolbar);
+//            if(toolbar != null) {
+//                toolbar.setTitle(mItem.getTitle());
+//            }
+
+            if(((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+                ((AppCompatActivity )getActivity()).getSupportActionBar().setTitle(mItem.getTitle());
+            } else {
+                Toast.makeText(getContext(), "NULL", Toast.LENGTH_LONG).show();
             }
 
-            setupTextViews(mItem);
         }
-    }
-
-    private void setupTextViews(Book mItem) {
-
     }
 
     @Override
@@ -74,12 +86,22 @@ public class BookDetailFragment extends Fragment {
             ((TextView) rootView.findViewById(R.id.author_view)).setText(mItem.getAuthor());
             ((TextView) rootView.findViewById(R.id.isbn_view)).setText(mItem.getISBN());
             ((TextView) rootView.findViewById(R.id.id_view)).setText(String.valueOf(mItem.getId()));
-            ((TextView) rootView.findViewById(R.id.desc_view)).setText(mItem.getDescription());
 
+            descTextView = (TextView) rootView.findViewById(R.id.desc_view);
+            /*
+                if the items description has been updated display it else display "Loading..."
+                 while it is fetched
+             */
+            if(mItem.getDescription() != null){
+                descTextView.setText(mItem.getDescription());
+            } else {
+                descTextView.setText(R.string.loading);
+                new DownloadDescriptionHandler(getContext(), this, mItem);
+            }
 
             /*
-                get int price as a string with -1 being default value, convert from cents/pence to whole value
-                and append currency
+                get int price as a string with -1 being default value,
+                convert from cents/pence to whole value and append currency
             */
             double fullPriceDouble = ((double) mItem.getPrice()) / 100; //TODO: implement BigDecimal
             String priceWithCurrency =  String.valueOf(fullPriceDouble) + " " + mItem.getCurrencyCode();
@@ -90,5 +112,17 @@ public class BookDetailFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * Not used in this class
+     */
+    @Override
+    public void finished(List<Book> list) {}
 
+    /**
+     * Used to update description TextView when finished downloading
+     */
+    @Override
+    public void finished(String description) {
+        descTextView.setText(description);
+    }
 }

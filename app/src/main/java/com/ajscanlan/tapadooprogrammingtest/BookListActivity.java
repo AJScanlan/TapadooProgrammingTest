@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
@@ -38,12 +40,21 @@ public class BookListActivity extends AppCompatActivity implements BookListFragm
      * device.
      */
     private boolean mTwoPane;
-    private BookListFragment mBookListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_app_bar);
+
+        //if the list has not been downloaded yet fetch it and populate FragmentList else just
+        //populate FragmentList. Used to avoid re-downloading every time
+        if(BookListFragment.mBooks == null){
+            new DownloadHandler(BookListActivity.this,
+                    ((BookListFragment)getSupportFragmentManager().findFragmentById(R.id.book_list)),
+                    DownloadHandler.BASE_URL);
+        } else {
+            ((BookListFragment)getSupportFragmentManager().findFragmentById(R.id.book_list)).finished(BookListFragment.mBooks);
+        }
 
         if (findViewById(R.id.book_detail_container) != null) {
             // The detail container view will be present only in the
@@ -66,6 +77,8 @@ public class BookListActivity extends AppCompatActivity implements BookListFragm
      */
     @Override
     public void onItemSelected(int position) {
+
+
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
@@ -87,13 +100,13 @@ public class BookListActivity extends AppCompatActivity implements BookListFragm
         }
     }
 
-    public void refreshList(View view) {
-//        ArrayList<Book> books = new ArrayList<>();
-//        books.add(new Book(0, 0, null, "A", null, null));
-//        books.add(new Book(0, 0, null, "A", null, null));
-//        books.add(new Book(0, 0, null, "A", null, null));
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
 
-        //((BookListFragment)getSupportFragmentManager().findFragmentById(R.id.book_list)).finished(books);
+    public void refreshList(MenuItem item) {
         new DownloadHandler(BookListActivity.this,
                 ((BookListFragment)getSupportFragmentManager().findFragmentById(R.id.book_list)),
                 DownloadHandler.BASE_URL);

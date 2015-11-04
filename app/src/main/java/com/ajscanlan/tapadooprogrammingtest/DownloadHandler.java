@@ -1,14 +1,9 @@
 package com.ajscanlan.tapadooprogrammingtest;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.ajscanlan.tapadooprogrammingtest.model.Book;
 
@@ -26,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by User1 on 03/11/2015.
+ * Created by Alexander Scanlan on 03/11/2015
  */
 public class DownloadHandler {
 
@@ -43,10 +38,10 @@ public class DownloadHandler {
         mContext = c;
         mCallback = callback;
 
-        new DownloadTask().execute(url);
+        new DownloadAllTask().execute(url);
     }
 
-    private String downloadUrl(String param) throws IOException {
+    static String downloadUrl(String param) throws IOException {
         InputStream inputStream = null;
 
         try{
@@ -83,7 +78,8 @@ public class DownloadHandler {
         }
     }
 
-    private class DownloadTask extends AsyncTask<String, Void, String> {
+    //The task used to fetch all books
+    private class DownloadAllTask extends AsyncTask<String, Void, String> {
         ProgressDialog dialog;
 
         @Override
@@ -120,7 +116,6 @@ public class DownloadHandler {
                 String title;
                 String ISBN;
                 String currencyCode;
-                String description;
 
                 //iterate through json array
                 for(int i = 0; i < myJsonArray.length(); ++i){
@@ -134,9 +129,14 @@ public class DownloadHandler {
                     ISBN = myJsonObject.getString("isbn");
                     currencyCode = myJsonObject.getString("currencyCode");
 
+                    //initialise book object
+                    Book tempBook = new Book(id, price, author, title, ISBN, currencyCode);
+
+                    //start task to download description
+                    //new DownloadDescTask().execute(tempBook);
 
                     //add book to list
-                    books.add(new Book(id, price, author, title, ISBN, currencyCode));
+                    books.add(tempBook);
                 }
 
                 dialog.dismiss();

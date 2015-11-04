@@ -22,11 +22,11 @@
 
     <!--</android.support.design.widget.AppBarLayout>-->
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="refreshList"
-        android:text="@string/refresh_list" />
+    <!--<Button-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:onClick="refreshList"-->
+        <!--android:text="@string/refresh_list" />-->
 
     <FrameLayout
         android:id="@+id/frameLayout"

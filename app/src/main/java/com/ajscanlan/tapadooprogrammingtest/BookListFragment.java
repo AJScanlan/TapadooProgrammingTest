@@ -1,11 +1,16 @@
 package com.ajscanlan.tapadooprogrammingtest;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.TwoLineListItem;
 
 import com.ajscanlan.tapadooprogrammingtest.model.Book;
 
@@ -34,16 +39,16 @@ public class BookListFragment extends ListFragment implements DownloadCallback{
      * A model implementation of the {@link Callbacks} interface that does
      * nothing. Used only when this fragment is not attached to an activity.
      */
-    private static Callbacks sDummyCallbacks = new Callbacks() {
-        @Override
-        public void onItemSelected(int position) {
-        }
-    };
+//    private static Callbacks sDummyCallbacks = new Callbacks() {
+//        @Override
+//        public void onItemSelected(int position) {
+//        }
+//    };
     /**
      * The fragment's current callback object, which is notified of list item
      * clicks.
      */
-    private Callbacks mCallbacks = sDummyCallbacks;
+    private Callbacks mCallbacks; //= sDummyCallbacks;
     /**
      * The current activated item position. Only used on tablets.
      */
@@ -56,6 +61,7 @@ public class BookListFragment extends ListFragment implements DownloadCallback{
     public BookListFragment() {
     }
 
+    //The callback method that is called by DownloadHandler.DownloadAllTask when the download is finished
     @Override
     public void finished(List<Book> list) {
         mBooks = list;
@@ -106,7 +112,7 @@ public class BookListFragment extends ListFragment implements DownloadCallback{
         super.onDetach();
 
         // Reset the active callbacks interface to the model implementation.
-        mCallbacks = sDummyCallbacks;
+       // mCallbacks = sDummyCallbacks;
     }
 
     @Override
@@ -162,4 +168,14 @@ public class BookListFragment extends ListFragment implements DownloadCallback{
          */
         public void onItemSelected(int position);
     }
+
+
+    /**
+     * Not used in this class
+     */
+    @Override
+    public void finished(String description) {
+
+    }
+
 }

@@ -8,4 +8,6 @@
     <string name="book_id">ID:</string>
     <string name="refresh_list">Refresh</string>
     <string name="desc_id">Description:</string>
+    <string name="loading">Loading...</string>
+    <string name="refresh_menu_item">Refresh</string>
 </resources>

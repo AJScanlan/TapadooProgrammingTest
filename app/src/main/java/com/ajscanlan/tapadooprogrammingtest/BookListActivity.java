@@ -75,7 +75,7 @@ public class BookListActivity extends AppCompatActivity implements BookListFragm
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction. Sends the position of the item in the list
-            // as an argument
+            // as an argument.
             Bundle arguments = new Bundle();
             arguments.putInt(BookDetailFragment.ARG_ITEM_POSITION, position);
             BookDetailFragment fragment = new BookDetailFragment();
